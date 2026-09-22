@@ -13,7 +13,7 @@ The project is intentionally scoped as a learning and portfolio exercise: it sho
 - **Live market list** — fetches real-time coin data (price, market cap, 24h volume) from CoinGecko.
 - **Search/filter** — instant, client-side filtering of the coin list by symbol as the user types.
 - **Asset detail view** — click any coin to see an expanded view with formatted price, market cap, and volume.
-- **Auto-refresh** — market data is re-fetched automatically every 5 minutes.
+- **Auto-refresh** — market data is re-fetched automatically every 60 seconds.
 - **Volume filtering** — coins with less than $1,000,000 in 24h volume are filtered out to reduce noise from illiquid assets.
 - **Currency formatting** — all monetary values are formatted with `Intl.NumberFormat` (`en-US`, USD).
 - **XSS-safe rendering** — all API-sourced text is escaped before being injected into the DOM.
@@ -42,10 +42,14 @@ The app is deliberately framework-free and flat: there is no `components/`, `pag
 
 This structure keeps the API layer swappable (a future migration to a different data provider only touches `marketApi.js`) while keeping the rendering logic simple enough not to need a component abstraction.
 
+> This project started against the static dataset in `src/market-data.js` (Pass 1)
+> and later moved to a live `fetch` call in `src/services/marketApi.js` (Pass 2) —
+> the rendering code didn't need to change, which is the point of the split.
+
 ## 5. Data Flow
 
 ```
-on load / every 5 minutes
+on load / every 60 seconds
         │
         ▼
  fetchCoins()  ──────►  CoinGecko /coins/markets endpoint
