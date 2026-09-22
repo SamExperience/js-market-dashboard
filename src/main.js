@@ -35,7 +35,10 @@ const inputSearch = document.querySelector("#search");
 const loading = document.querySelector("#loading");
 const error = document.querySelector("#error");
 const noResults = document.querySelector("#no-results");
-
+const formatter = new Intl.NumberFormat("en-US", {
+  style: "currency",
+  currency: "USD",
+});
 let filterList;
 
 async function filterMarketData() {
@@ -44,6 +47,7 @@ async function filterMarketData() {
     marketList.hidden = true;
 
     const data = await fetchCoins();
+    error.hidden = true;
     if (!data) {
       error.textContent = "No data available";
       error.hidden = false;
@@ -66,7 +70,7 @@ filterMarketData();
 
 setInterval(() => {
   filterMarketData();
-}, 60_000);
+}, 5 * 60_000);
 
 function renderMarketList(data) {
   marketList.innerHTML = data
@@ -76,7 +80,7 @@ function renderMarketList(data) {
         <img src="${escapeHtml(element.image)}" alt="${escapeHtml(element.name)}" height="30" width="30">
         <span>${escapeHtml(element.symbol)}</span>
         <span>${escapeHtml(element.name)}</span>
-        <span>${escapeHtml(element.current_price)}</span>
+        <span>${escapeHtml(formatter.format(element.current_price))}</span>
         </li>
         `,
     )
@@ -110,9 +114,9 @@ function renderAssetsDetail(coin) {
           <img src="${escapeHtml(coin.image)}" alt="${escapeHtml(coin.name)}" height="50" width="50">
           <span>${escapeHtml(coin.symbol)}</span><br/>
           <span>${escapeHtml(coin.name)}</span><br/>
-          <span>current price: ${escapeHtml(coin.current_price)}</span><br/>
-          <span>market cap: ${escapeHtml(coin.market_cap)}</span><br/>
-          <span>volume: ${escapeHtml(coin.total_volume)}</span><br/>
+          <span>current price: ${escapeHtml(formatter.format(coin.current_price))}</span><br/>
+          <span>market cap: ${escapeHtml(formatter.format(coin.market_cap))}</span><br/>
+          <span>volume: ${escapeHtml(formatter.format(coin.total_volume))}</span><br/>
         </article>`;
   marketList.hidden = true;
   assetDetail.hidden = false;
