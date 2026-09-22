@@ -79,6 +79,7 @@ marketList.addEventListener("click", (event) => {
 function renderAssetsDetail(coin) {
   assetDetail.innerHTML = `
         <article data-id=${coin.id}>
+        <button id="back-button">Back</button>
           <img src="${coin.image}" alt="${coin.name}" height="50" width="50">
           <span>${coin.symbol}</span><br/>
           <span>${coin.name}</span><br/>
@@ -88,4 +89,19 @@ function renderAssetsDetail(coin) {
         </larticle>`;
   marketList.hidden = true;
   assetDetail.hidden = false;
+
+  const buttonBackDetail = document.querySelector("#back-button");
+
+  buttonBackDetail.addEventListener("click", () => {
+    assetDetail.hidden = true;
+    marketList.hidden = false;
+
+    const searchCoin = inputSearch.value.toLowerCase();
+
+    const listSearch = filterList.filter((coin) =>
+      coin.symbol.toLowerCase().includes(searchCoin),
+    );
+
+    renderMarketList(listSearch);
+  });
 }
