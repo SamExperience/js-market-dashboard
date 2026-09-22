@@ -70,6 +70,7 @@ inputSearch.addEventListener("input", (event) => {
   const filteredData = filterList.filter((coin) =>
     coin.symbol.trim().toLowerCase().includes(searchCoin),
   );
+
   applyFilterAndRender(filteredData);
 });
 
@@ -114,6 +115,7 @@ function applyFilterAndRender(filteredData) {
   if (filteredData.length === 0) {
     noResults.hidden = false;
     marketList.hidden = true;
+    marketCount.textContent = `0/${total}`;
   } else {
     noResults.hidden = true;
     marketList.hidden = false;
