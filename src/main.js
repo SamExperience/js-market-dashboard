@@ -40,6 +40,9 @@ let filterList;
 
 async function filterMarketData() {
   try {
+    loading.hidden = false;
+    marketList.hidden = true;
+
     const data = await fetchCoins();
     if (!data) {
       error.textContent = "No data available";
@@ -54,6 +57,8 @@ async function filterMarketData() {
   } catch (err) {
     error.textContent = "Unable to load market data.";
     error.hidden = false;
+  } finally {
+    loading.hidden = true;
   }
 }
 
