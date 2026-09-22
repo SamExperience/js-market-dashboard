@@ -1,4 +1,5 @@
 import "./style.css";
+import { marketData } from "./market-data";
 
 document.querySelector("#app").innerHTML = `
   <header>
@@ -25,3 +26,21 @@ document.querySelector("#app").innerHTML = `
     <p id="no-results" hidden>No results found.</p>
   </main>
 `;
+
+const marketCount = document.querySelector("#market-count");
+const marketList = document.querySelector("#market-list");
+const assetDetail = document.querySelector("#asset-detail");
+const inputSearch = document.querySelector("#search");
+
+function filterMarketData() {
+  const filterList = marketData.filter((data) => {
+    data.total_volume > 1_000_000;
+  });
+  const total = marketData.length;
+  const show = filterList.length;
+
+  return { filterList, total, show };
+}
+
+const { total, show } = filterMarketData();
+marketCount.textContent = `${show}/${total}`;
