@@ -40,21 +40,30 @@ function filterMarketData() {
   return { filterList, total, show };
 }
 
-const { total, show, filterList } = filterMarketData();
-marketCount.textContent = `${show}/${total}`;
+let { total, show, filterList } = filterMarketData();
 
 function renderMarketList(data) {
   marketList.innerHTML = "";
 
   data.forEach((element) => {
     marketList.innerHTML += `
-    <li>
+        <li>
         <img src="${element.image}" alt="${element.name}" height="30" width="30">
         <span>${element.symbol}</span>
         <span>${element.name}</span>
         <span>${element.current_price}</span>
-    </li>`;
+        </li>`;
   });
+  marketCount.textContent = `${data.length}/${total}`;
 }
 
 renderMarketList(filterList);
+
+inputSearch.addEventListener("input", (event) => {
+  const searchCoin = event.target.value.trim().toLowerCase();
+
+  const filteredData = filterList.filter((coin) =>
+    coin.symbol.trim().toLowerCase().includes(searchCoin),
+  );
+  renderMarketList(filteredData);
+});
