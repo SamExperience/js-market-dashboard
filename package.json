@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "docs": "jsdoc -r src -d docs"
   },
   "devDependencies": {
     "@tailwindcss/vite": "^4.3.3",
+    "jsdoc": "^4.0.5",
     "tailwindcss": "^4.3.3",
     "vite": "^8.3.0"
   }

@@ -1,3 +1,11 @@
+/**
+ * Static mock market data used as sample/fallback coin data, mirroring
+ * the shape returned by the live market API (price, market cap, volume, etc.).
+ *
+ * @type {Array<Object>}
+ * @example
+ * const firstSymbol = marketData[0].symbol; // "btc"
+ */
 export const marketData = [
   {
     id: "bitcoin",

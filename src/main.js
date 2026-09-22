@@ -45,6 +45,16 @@ const formatter = new Intl.NumberFormat("en-US", {
 });
 let filterList;
 
+/**
+ * Fetches the latest market data, filters out low-volume coins, and
+ * refreshes the UI accordingly. Manages the loading and error states.
+ *
+ * @async
+ * @returns {Promise<Array<Object>|undefined>} The filtered coin list, or
+ * `undefined` if the fetch failed.
+ * @example
+ * const coins = await filterMarketData();
+ */
 async function filterMarketData() {
   try {
     loading.hidden = false;
@@ -76,6 +86,15 @@ setInterval(() => {
   filterMarketData();
 }, 5 * 60_000);
 
+/**
+ * Renders the given coins as rows in the market list and updates the
+ * visible/total count label.
+ *
+ * @param {Array<Object>} data - The coins to display.
+ * @returns {void}
+ * @example
+ * renderMarketList(filterList);
+ */
 function renderMarketList(data) {
   marketList.innerHTML = data
     .map(
@@ -111,6 +130,15 @@ marketList.addEventListener("click", (event) => {
   renderAssetsDetail(selectedCoin);
 });
 
+/**
+ * Renders the detail view for a single coin and wires up its "back"
+ * button to return to the market list.
+ *
+ * @param {Object} coin - The coin to display details for.
+ * @returns {void}
+ * @example
+ * renderAssetsDetail(selectedCoin);
+ */
 function renderAssetsDetail(coin) {
   assetDetail.innerHTML = `
         <article data-id=${escapeHtml(coin.id)} class="px-4 py-4 sm:px-6">
@@ -155,6 +183,15 @@ function renderAssetsDetail(coin) {
   });
 }
 
+/**
+ * Displays either the "no results" message or the rendered market list,
+ * depending on whether the filtered data is empty.
+ *
+ * @param {Array<Object>} filteredData - The coins matching the current filter.
+ * @returns {void}
+ * @example
+ * applyFilterAndRender(filterList);
+ */
 function applyFilterAndRender(filteredData) {
   if (filteredData.length === 0) {
     noResults.hidden = false;
@@ -166,6 +203,14 @@ function applyFilterAndRender(filteredData) {
     renderMarketList(filteredData);
   }
 }
+/**
+ * Escapes a string for safe interpolation into HTML markup.
+ *
+ * @param {string} str - The raw string to escape.
+ * @returns {string} The HTML-escaped string.
+ * @example
+ * escapeHtml("<b>"); // "&lt;b&gt;"
+ */
 function escapeHtml(str) {
   const div = document.createElement("div");
   div.textContent = str;
