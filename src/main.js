@@ -31,33 +31,38 @@ const marketCount = document.querySelector("#market-count");
 const marketList = document.querySelector("#market-list");
 const assetDetail = document.querySelector("#asset-detail");
 const inputSearch = document.querySelector("#search");
+const loading = document.querySelector("#loading");
+const error = document.querySelector("#error");
+const noResults = document.querySelector("#no-results");
+
+const total = marketData.length;
 
 function filterMarketData() {
-  const filterList = marketData.filter((data) => data.total_volume > 1_000_000);
-  const total = marketData.length;
-  const show = filterList.length;
+  const filterList = marketData.filter((coin) => coin.total_volume > 1_000_000);
 
-  return { filterList, total, show };
+  applyFilterAndRender(filterList);
+
+  return { filterList };
 }
 
-let { total, show, filterList } = filterMarketData();
+let { filterList } = filterMarketData();
 
 function renderMarketList(data) {
-  marketList.innerHTML = "";
+  marketList.innerHTML = data
+    .map(
+      (element) => `
+        <li data-id=${escapeHtml(element.id)}>
+        <img src="${escapeHtml(element.image)}" alt="${escapeHtml(element.name)}" height="30" width="30">
+        <span>${escapeHtml(element.symbol)}</span>
+        <span>${escapeHtml(element.name)}</span>
+        <span>${escapeHtml(element.current_price)}</span>
+        </li>
+        `,
+    )
+    .join("");
 
-  data.forEach((element, id) => {
-    marketList.innerHTML += `
-        <li data-id=${element.id}>
-        <img src="${element.image}" alt="${element.name}" height="30" width="30">
-        <span>${element.symbol}</span>
-        <span>${element.name}</span>
-        <span>${element.current_price}</span>
-        </li>`;
-  });
   marketCount.textContent = `${data.length}/${total}`;
 }
-
-renderMarketList(filterList);
 
 inputSearch.addEventListener("input", (event) => {
   const searchCoin = event.target.value.trim().toLowerCase();
@@ -65,7 +70,7 @@ inputSearch.addEventListener("input", (event) => {
   const filteredData = filterList.filter((coin) =>
     coin.symbol.trim().toLowerCase().includes(searchCoin),
   );
-  renderMarketList(filteredData);
+  applyFilterAndRender(filteredData);
 });
 
 marketList.addEventListener("click", (event) => {
@@ -78,15 +83,15 @@ marketList.addEventListener("click", (event) => {
 
 function renderAssetsDetail(coin) {
   assetDetail.innerHTML = `
-        <article data-id=${coin.id}>
+        <article data-id=${escapeHtml(coin.id)}>
         <button id="back-button">Back</button>
-          <img src="${coin.image}" alt="${coin.name}" height="50" width="50">
-          <span>${coin.symbol}</span><br/>
-          <span>${coin.name}</span><br/>
-          <span>current price: ${coin.current_price}</span><br/>
-          <span>market cap: ${coin.market_cap}</span><br/>
-          <span>volume: ${coin.total_volume}</span><br/>
-        </larticle>`;
+          <img src="${escapeHtml(coin.image)}" alt="${escapeHtml(coin.name)}" height="50" width="50">
+          <span>${escapeHtml(coin.symbol)}</span><br/>
+          <span>${escapeHtml(coin.name)}</span><br/>
+          <span>current price: ${escapeHtml(coin.current_price)}</span><br/>
+          <span>market cap: ${escapeHtml(coin.market_cap)}</span><br/>
+          <span>volume: ${escapeHtml(coin.total_volume)}</span><br/>
+        </article>`;
   marketList.hidden = true;
   assetDetail.hidden = false;
 
@@ -96,12 +101,27 @@ function renderAssetsDetail(coin) {
     assetDetail.hidden = true;
     marketList.hidden = false;
 
-    const searchCoin = inputSearch.value.toLowerCase();
+    const searchCoin = inputSearch.value.trim().toLowerCase();
 
     const listSearch = filterList.filter((coin) =>
       coin.symbol.toLowerCase().includes(searchCoin),
     );
-
-    renderMarketList(listSearch);
+    applyFilterAndRender(listSearch);
   });
+}
+
+function applyFilterAndRender(filteredData) {
+  if (filteredData.length === 0) {
+    noResults.hidden = false;
+    marketList.hidden = true;
+  } else {
+    noResults.hidden = true;
+    marketList.hidden = false;
+    renderMarketList(filteredData);
+  }
+}
+function escapeHtml(str) {
+  const div = document.createElement("div");
+  div.textContent = str;
+  return div.innerHTML;
 }
