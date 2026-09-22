@@ -1,5 +1,6 @@
 import "./style.css";
-import { marketData } from "./market-data";
+//import { marketData } from "./market-data";
+import { fetchCoins } from "./services/marketApi";
 
 document.querySelector("#app").innerHTML = `
   <header>
@@ -35,17 +36,28 @@ const loading = document.querySelector("#loading");
 const error = document.querySelector("#error");
 const noResults = document.querySelector("#no-results");
 
-const total = marketData.length;
+let filterList;
 
-function filterMarketData() {
-  const filterList = marketData.filter((coin) => coin.total_volume > 1_000_000);
+async function filterMarketData() {
+  try {
+    const data = await fetchCoins();
+    if (!data) {
+      error.textContent = "No data available";
+      error.hidden = false;
+      return;
+    }
+    filterList = data.filter((coin) => coin.total_volume > 1_000_000);
 
-  applyFilterAndRender(filterList);
+    applyFilterAndRender(filterList);
 
-  return { filterList };
+    return filterList;
+  } catch (err) {
+    error.textContent = "Unable to load market data.";
+    error.hidden = false;
+  }
 }
 
-let { filterList } = filterMarketData();
+filterMarketData();
 
 function renderMarketList(data) {
   marketList.innerHTML = data
@@ -61,7 +73,7 @@ function renderMarketList(data) {
     )
     .join("");
 
-  marketCount.textContent = `${data.length}/${total}`;
+  marketCount.textContent = `${data.length}/${filterList.length}`;
 }
 
 inputSearch.addEventListener("input", (event) => {
@@ -115,7 +127,7 @@ function applyFilterAndRender(filteredData) {
   if (filteredData.length === 0) {
     noResults.hidden = false;
     marketList.hidden = true;
-    marketCount.textContent = `0/${total}`;
+    marketCount.textContent = `0/${filterList.length}`;
   } else {
     noResults.hidden = true;
     marketList.hidden = false;
