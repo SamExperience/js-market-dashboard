@@ -17,7 +17,7 @@ document.querySelector("#app").innerHTML = `
   </header>
 
   <main>
-    <section id="market-list"></section>
+    <ul id="market-list"></ul>
 
     <section id="asset-detail" hidden></section>
 
@@ -33,14 +33,28 @@ const assetDetail = document.querySelector("#asset-detail");
 const inputSearch = document.querySelector("#search");
 
 function filterMarketData() {
-  const filterList = marketData.filter((data) => {
-    data.total_volume > 1_000_000;
-  });
+  const filterList = marketData.filter((data) => data.total_volume > 1_000_000);
   const total = marketData.length;
   const show = filterList.length;
 
   return { filterList, total, show };
 }
 
-const { total, show } = filterMarketData();
+const { total, show, filterList } = filterMarketData();
 marketCount.textContent = `${show}/${total}`;
+
+function renderMarketList(data) {
+  marketList.innerHTML = "";
+
+  data.forEach((element) => {
+    marketList.innerHTML += `
+    <li>
+        <img src="${element.image}" alt="${element.name}" height="30" width="30">
+        <span>${element.symbol}</span>
+        <span>${element.name}</span>
+        <span>${element.current_price}</span>
+    </li>`;
+  });
+}
+
+renderMarketList(filterList);
