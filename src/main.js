@@ -21,8 +21,8 @@ document.querySelector("#app").innerHTML = `
     </div>
   </header>
 
-  <main>
-    <ul id="market-list"></ul>
+  <main class="mx-auto max-w-2xl">
+    <ul id="market-list" class="list-none divide-y divide-gray-200"></ul>
 
     <section id="asset-detail" hidden></section>
 
@@ -80,11 +80,11 @@ function renderMarketList(data) {
   marketList.innerHTML = data
     .map(
       (element) => `
-        <li data-id=${escapeHtml(element.id)}>
-        <img src="${escapeHtml(element.image)}" alt="${escapeHtml(element.name)}" height="30" width="30">
-        <span>${escapeHtml(element.symbol)}</span>
-        <span>${escapeHtml(element.name)}</span>
-        <span>${escapeHtml(formatter.format(element.current_price))}</span>
+        <li data-id=${escapeHtml(element.id)} class="flex items-center gap-2.5 px-3 py-2 cursor-pointer hover:bg-gray-50 sm:px-4">
+        <img src="${escapeHtml(element.image)}" alt="${escapeHtml(element.name)}" height="24" width="24" class="rounded-full">
+        <span class="text-sm font-medium uppercase text-gray-900">${escapeHtml(element.symbol)}</span>
+        <span class="hidden text-sm text-gray-500 sm:inline">${escapeHtml(element.name)}</span>
+        <span class="ml-auto text-sm font-medium tabular-nums text-gray-900">${escapeHtml(formatter.format(element.current_price))}</span>
         </li>
         `,
     )
