@@ -45,9 +45,9 @@ let { total, show, filterList } = filterMarketData();
 function renderMarketList(data) {
   marketList.innerHTML = "";
 
-  data.forEach((element) => {
+  data.forEach((element, id) => {
     marketList.innerHTML += `
-        <li>
+        <li data-id=${element.id}>
         <img src="${element.image}" alt="${element.name}" height="30" width="30">
         <span>${element.symbol}</span>
         <span>${element.name}</span>
@@ -66,4 +66,12 @@ inputSearch.addEventListener("input", (event) => {
     coin.symbol.trim().toLowerCase().includes(searchCoin),
   );
   renderMarketList(filteredData);
+});
+
+marketList.addEventListener("click", (event) => {
+  const row = event.target.closest("li");
+  if (!row) return;
+
+  const selectedCoin = filterList.find((coin) => coin.id === row.dataset.id);
+  console.log(selectedCoin);
 });
