@@ -113,14 +113,29 @@ marketList.addEventListener("click", (event) => {
 
 function renderAssetsDetail(coin) {
   assetDetail.innerHTML = `
-        <article data-id=${escapeHtml(coin.id)}>
-        <button id="back-button">Back</button>
-          <img src="${escapeHtml(coin.image)}" alt="${escapeHtml(coin.name)}" height="50" width="50">
-          <span>${escapeHtml(coin.symbol)}</span><br/>
-          <span>${escapeHtml(coin.name)}</span><br/>
-          <span>current price: ${escapeHtml(formatter.format(coin.current_price))}</span><br/>
-          <span>market cap: ${escapeHtml(formatter.format(coin.market_cap))}</span><br/>
-          <span>volume: ${escapeHtml(formatter.format(coin.total_volume))}</span><br/>
+        <article data-id=${escapeHtml(coin.id)} class="px-4 py-4 sm:px-6">
+        <button id="back-button" class="mb-4 text-sm text-gray-500 hover:text-gray-900">Back</button>
+          <div class="flex items-center gap-3">
+            <img src="${escapeHtml(coin.image)}" alt="${escapeHtml(coin.name)}" height="50" width="50" class="rounded-full">
+            <div>
+              <span class="block text-lg font-medium uppercase text-gray-900">${escapeHtml(coin.symbol)}</span>
+              <span class="block text-sm text-gray-500">${escapeHtml(coin.name)}</span>
+            </div>
+          </div>
+          <div class="mt-4 divide-y divide-gray-200">
+            <div class="flex justify-between py-2">
+              <span class="text-gray-500">current price</span>
+              <span class="text-xl font-medium tabular-nums text-gray-900">${escapeHtml(formatter.format(coin.current_price))}</span>
+            </div>
+            <div class="flex justify-between py-2">
+              <span class="text-gray-500">market cap</span>
+              <span class="font-medium tabular-nums text-gray-900">${escapeHtml(formatter.format(coin.market_cap))}</span>
+            </div>
+            <div class="flex justify-between py-2">
+              <span class="text-gray-500">volume</span>
+              <span class="font-medium tabular-nums text-gray-900">${escapeHtml(formatter.format(coin.total_volume))}</span>
+            </div>
+          </div>
         </article>`;
   marketList.hidden = true;
   assetDetail.hidden = false;
