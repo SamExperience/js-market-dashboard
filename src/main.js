@@ -84,7 +84,7 @@ filterMarketData();
 
 setInterval(() => {
   filterMarketData();
-}, 5 * 60_000);
+}, 60_000);
 
 /**
  * Renders the given coins as rows in the market list and updates the
