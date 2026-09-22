@@ -3,18 +3,22 @@ import "./style.css";
 import { fetchCoins } from "./services/marketApi";
 
 document.querySelector("#app").innerHTML = `
-  <header>
-    <h1>Market Dashboard</h1>
+  <header class="flex flex-col gap-3 border-b border-gray-200 px-4 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <div class="flex items-baseline gap-3">
+      <h1 class="text-2xl font-medium text-gray-900">Market Dashboard</h1>
+      <p id="market-count" class="text-sm text-gray-500">0/0</p>
+    </div>
 
-    <p id="market-count">0/0</p>
-
-    <label for="search">Search by symbol</label>
-    <input
-      type="search"
-      id="search"
-      name="search"
-      placeholder="Search symbol..."
-    />
+    <div class="flex flex-col gap-1 sm:w-64">
+      <label for="search" class="text-sm text-gray-600">Search by symbol</label>
+      <input
+        type="search"
+        id="search"
+        name="search"
+        placeholder="Search symbol..."
+        class="rounded-md border border-gray-300 px-3 py-1.5 text-sm text-gray-900 focus:border-gray-400 focus:outline-none"
+      />
+    </div>
   </header>
 
   <main>
