@@ -73,5 +73,19 @@ marketList.addEventListener("click", (event) => {
   if (!row) return;
 
   const selectedCoin = filterList.find((coin) => coin.id === row.dataset.id);
-  console.log(selectedCoin);
+  renderAssetsDetail(selectedCoin);
 });
+
+function renderAssetsDetail(coin) {
+  assetDetail.innerHTML = `
+        <article data-id=${coin.id}>
+          <img src="${coin.image}" alt="${coin.name}" height="50" width="50">
+          <span>${coin.symbol}</span><br/>
+          <span>${coin.name}</span><br/>
+          <span>current price: ${coin.current_price}</span><br/>
+          <span>market cap: ${coin.market_cap}</span><br/>
+          <span>volume: ${coin.total_volume}</span><br/>
+        </larticle>`;
+  marketList.hidden = true;
+  assetDetail.hidden = false;
+}
