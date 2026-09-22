@@ -64,6 +64,10 @@ async function filterMarketData() {
 
 filterMarketData();
 
+setInterval(() => {
+  filterMarketData();
+}, 60_000);
+
 function renderMarketList(data) {
   marketList.innerHTML = data
     .map(
